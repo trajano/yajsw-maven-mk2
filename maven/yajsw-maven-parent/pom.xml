@@ -1,11 +1,44 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.rzo</groupId>
-  <artifactId>yajsw-maven-parent</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>yajsw-base</module>
-  	<module>yajsw-core-deps</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<space>&#0020;</space>
+		<lf>&#0010;</lf>
+		<cr>&#0014;</cr>
+		<linesep>${line.separator}</linesep>
+		<yajsw-version>0.0.1-SNAPSHOT</yajsw-version>
+	</properties>
+	<packaging>pom</packaging>
+	<dependencyManagement>
+		<dependency>
+			<groupId>org.rzo</groupId>
+			<artifactId>yajsw-core-deps</artifactId>
+			<version>${yajsw-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rzo</groupId>
+			<artifactId>yajsw-maven-parent</artifactId>
+			<version>${yajsw-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rzo</groupId>
+			<artifactId>yajsw-core</artifactId>
+			<version>${yajsw-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rzo</groupId>
+			<artifactId>yajsw-base</artifactId>
+			<version>${yajsw-version}</version>
+		</dependency>
+	</dependencyManagement>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.rzo</groupId>
+	<artifactId>yajsw-maven-parent</artifactId>
+	<version>${yajsw-version}</version>
+	<modules>
+		<module>yajsw-base</module>
+		<module>yajsw-core-deps</module>
+		<module>yajsw-core</module>
+	</modules>
 </project>

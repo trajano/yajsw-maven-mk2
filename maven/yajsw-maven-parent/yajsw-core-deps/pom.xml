@@ -4,7 +4,7 @@
   <parent>
   	<groupId>org.rzo</groupId>
   	<artifactId>yajsw-maven-parent</artifactId>
-  	<version>0.0.1-SNAPSHOT</version>
   	<relativePath>..</relativePath>
+  	<version>${yajsw-version}</version>
   </parent>
 </project>
