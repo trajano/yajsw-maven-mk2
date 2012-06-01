@@ -13,14 +13,12 @@
 		<linesep>${line.separator}</linesep>
 	</properties>
 	<dependencies>
-	<dependency>
-		<groupId>org.rzo</groupId>
-		<artifactId>yajsw-core-deps</artifactId>
-	</dependency>
 		<dependency>
 			<groupId>org.rzo</groupId>
-			<artifactId>yajsw-base</artifactId>
+			<artifactId>yajsw-core-deps</artifactId>
+			<version>${yajsw-version}</version>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -329,22 +327,7 @@
 		
 
 	</build>
-	<repositories>
-		<!-- <repository> <id>Releases</id> <url>http://192.168.6.242:8082/nexus/content/repositories/releases</url> 
-			</repository> <repository> <id>Apache Snapshots Proxy</id> <url>http://192.168.6.242:8082/nexus/content/repositories/apache-snapshots/</url> 
-			</repository> -->
-		<repository>
-			<id>Apache Snapshots</id>
-			<url>https://repository.apache.org/content/groups/snapshots/</url>
-
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>beardedgeeks-releases</id>
-			<url>http://beardedgeeks.googlecode.com/svn/repository/releases</url>
-		</pluginRepository>
-	</pluginRepositories>
+	
 	<parent>
 		<groupId>org.rzo</groupId>
 		<artifactId>yajsw-maven-parent</artifactId>

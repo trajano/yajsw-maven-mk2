@@ -1,22 +1,85 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>yajsw-maven-parent</artifactId>
-    <groupId>org.rzo</groupId>
-    <version>${yajsw-version}</version>
-    <relativePath>..</relativePath>
-  </parent>
-  <artifactId>yajsw-core</artifactId>
-  <dependencies>
-  	<dependency>
-  		<groupId>org.rzo</groupId>
-  		<artifactId>yajsw-base</artifactId>
-  		<version>${yajsw-version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.rzo</groupId>
-  		<artifactId>yajsw-core-deps</artifactId>
-  		<version>${yajsw-version}</version>
-  	</dependency>
-  </dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>yajsw-maven-parent</artifactId>
+		<groupId>org.rzo</groupId>
+		<version>${yajsw-version}</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>yajsw-core</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>org.rzo</groupId>
+			<artifactId>yajsw-base</artifactId>
+			<version>${yajsw-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rzo</groupId>
+			<artifactId>yajsw-core-deps</artifactId>
+			<version>${yajsw-version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>build-classpath</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>build-classpath</goal>
+						</goals>
+						<configuration>
+							<attach>true</attach>
+							<localRepoProperty>../lib</localRepoProperty>
+							<pathSeparator>$${pathDelim}</pathSeparator>
+
+							<outputFile>${basedir}/target/assembly/classPath</outputFile>
+
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>compile</id>
+						<phase>compile</phase>
+						<configuration>
+							<target>
+								<property name="cp.props"
+									value="${basedir}/target/assembly/classPath.properties" />
+								<property name="ls" value="${line.separator}" />
+
+								<concat destfile="${cp.props}">
+									<string>wrapper.core.classpath=</string>
+									<filelist dir="${basedir}/target/assembly" files="classPath" />
+								</concat>
+								<property file="${cp.props}" />
+								<echo file="${MANIFEST}"
+									message="Manifest-Version: 1.0
+					${ls}Class-Path-Wrapper-Core: ${ls} ${wrapper.core.classpath}${ls}
+					${ls}Class-Path-Wrapper-Extended: ${ls} ${wrapper.core.classpath}${ls}
+					${ls}Class-Path-App: ${ls} ${wrapper.core.classpath}${ls}
+					${ls}Main-Class: org.rzo.yajsw.boot.WrapperExeBooter${ls}" />
+								<replace file="${MANIFEST}" token="${pathDelim}" value=" " />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
