@@ -7,6 +7,7 @@
 		<space>&#0020;</space>
 		<lf>&#0010;</lf>
 		<cr>&#0014;</cr>
+		<bs>&#0092;</bs>
 		<linesep>${line.separator}</linesep>
 	</properties>
 
@@ -143,6 +144,8 @@
 					${ls}Class-Path-App: ${ls} ${wrapper.core.classpath}${ls}
 					${ls}Main-Class: org.rzo.yajsw.boot.WrapperExeBooter${ls}" />
 								<replace file="${MANIFEST}" token="${pathDelim}" value=" " />
+								<replace file="${MANIFEST}" token="${bs}" value="/" />
+								
 							</target>
 						</configuration>
 						<goals>
