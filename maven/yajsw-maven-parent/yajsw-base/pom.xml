@@ -136,6 +136,8 @@
 									<string>wrapper.core.classpath=</string>
 									<filelist dir="${basedir}/target/assembly" files="classPath" />
 								</concat>
+								<replace file="${cp.props}" token="${bs}" value="/" />
+								
 								<property file="${cp.props}" />
 								<echo file="${MANIFEST}"
 									message="Manifest-Version: 1.0
@@ -144,7 +146,6 @@
 					${ls}Class-Path-App: ${ls} ${wrapper.core.classpath}${ls}
 					${ls}Main-Class: org.rzo.yajsw.boot.WrapperExeBooter${ls}" />
 								<replace file="${MANIFEST}" token="${pathDelim}" value=" " />
-								<replace file="${MANIFEST}" token="${bs}" value="/" />
 								
 							</target>
 						</configuration>
