@@ -1,10 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>yajsw-base</artifactId>
-	<version>${yajsw-version}</version>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<yajsw-version>0.0.1</yajsw-version>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<MANIFEST>${basedir}/src/main/resources/META-INF/MANIFEST.MF</MANIFEST>
 		<space>&#0020;</space>
@@ -12,11 +9,15 @@
 		<cr>&#0014;</cr>
 		<linesep>${line.separator}</linesep>
 	</properties>
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>yajsw-base</artifactId>
+	<version>${yajsw-version}</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.rzo</groupId>
 			<artifactId>yajsw-core-deps</artifactId>
-			<version>${yajsw-version}</version>
+			
 		</dependency>
 
 	</dependencies>
