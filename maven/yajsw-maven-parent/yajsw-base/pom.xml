@@ -141,10 +141,10 @@
 								<property file="${cp.props}" />
 								<echo file="${MANIFEST}"
 									message="Manifest-Version: 1.0
-					${ls}Class-Path-Wrapper-Core: ${ls} ${wrapper.core.classpath}${ls}
-					${ls}Class-Path-Wrapper-Extended: ${ls} ${wrapper.core.classpath}${ls}
-					${ls}Class-Path-App: ${ls} ${wrapper.core.classpath}${ls}
-					${ls}Main-Class: org.rzo.yajsw.boot.WrapperExeBooter${ls}" />
+										${ls}Class-Path-Wrapper-Core: ${ls} ${wrapper.core.classpath}${ls}
+										${ls}Class-Path-Wrapper-Extended: ${ls} ${wrapper.core.classpath}${ls}
+										${ls}Class-Path-App: ${ls} ${wrapper.core.classpath}${ls}
+										${ls}Main-Class: org.rzo.yajsw.boot.WrapperExeBooter${ls}" />
 								<replace file="${MANIFEST}" token="${pathDelim}" value=" " />
 								
 							</target>
