@@ -1,10 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<artifactId>yajsw-maven-parent</artifactId>
 		<groupId>org.rzo</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${yajsw-version}</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>yajsw-core</artifactId>
@@ -12,12 +13,12 @@
 		<dependency>
 			<groupId>org.rzo</groupId>
 			<artifactId>yajsw-base</artifactId>
-			<version>${yajsw-version}</version>
+		
 		</dependency>
 		<dependency>
 			<groupId>org.rzo</groupId>
 			<artifactId>yajsw-core-deps</artifactId>
-			<version>${yajsw-version}</version>
+	
 		</dependency>
 	</dependencies>
 	<build>

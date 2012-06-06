@@ -7,7 +7,7 @@
 		<lf>&#0010;</lf>
 		<cr>&#0014;</cr>
 		<linesep>${line.separator}</linesep>
-		<yajsw-version>0.0.1-SNAPSHOT</yajsw-version>
+		<yajsw-version>0.0.1</yajsw-version>
 	</properties>
 	<repositories>
 		<!-- <repository> <id>Releases</id> <url>http://192.168.6.242:8082/nexus/content/repositories/releases</url> 
@@ -16,9 +16,16 @@
 		<repository>
 			<id>Apache Snapshots</id>
 			<url>https://repository.apache.org/content/groups/snapshots/</url>
-
+			
+	
 		</repository>
 	</repositories>
+	<distributionManagement>
+	<repository>
+		<id>Releases</id>
+		 <url>http://localhost:8082/nexus/content/repositories/releases/</url>
+		</repository>
+		</distributionManagement>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>beardedgeeks-releases</id>
