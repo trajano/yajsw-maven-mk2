@@ -11,6 +11,7 @@
 
   <dependencySets>
     <dependencySet>
+    <useTransitiveDependencies>false</useTransitiveDependencies>
     <outputDirectory>/</outputDirectory>
       <unpack>true</unpack>
       <scope>runtime</scope>
