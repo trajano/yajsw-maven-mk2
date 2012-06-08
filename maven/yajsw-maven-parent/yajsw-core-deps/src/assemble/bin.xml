@@ -11,9 +11,7 @@
 
   <dependencySets>
     <dependencySet>
-   <!--  <excludes>
-        <exclude>net.java.dev.jna:jna</exclude>
-      </excludes> -->
+
     <outputDirectory>/</outputDirectory>
     <useTransitiveDependencies>true</useTransitiveDependencies>
       <unpack>true</unpack>
