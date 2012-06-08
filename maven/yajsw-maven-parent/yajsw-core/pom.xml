@@ -17,13 +17,12 @@
 			<artifactId>yajsw-base</artifactId>
 		
 		</dependency>
-		 
+	 
 		<dependency>
 			<groupId>org.rzo</groupId>
 			<artifactId>yajsw-core-deps</artifactId>
 			<classifier>distribution</classifier>
 			<version>0.0.1</version>
-			<scope>runtime</scope>
 		</dependency>
 		
 	</dependencies>
@@ -88,7 +87,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<!-- <executions>
+				<executions>
 					<execution>
 						<id>package-with-dependencies</id>
 						<phase>package</phase>
@@ -101,70 +100,17 @@
 				</executions>
 				<configuration>
 				
-					<descriptor>src/assemble/bin.xml</descriptor>
+					<descriptor>src/assemble/core.xml</descriptor>
 					<archive>
 						<manifestFile>${MANIFEST}</manifestFile>
 
 					</archive>
 				</configuration>
- -->
+
 			</plugin>
 			
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-dependency-plugin
-										</artifactId>
-										<versionRange>
-											[2.4,)
-										</versionRange>
-										<goals>
-											<goal>build-classpath</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-antrun-plugin
-										</artifactId>
-										<versionRange>
-											[1.7,)
-										</versionRange>
-										<goals>
-											<goal>run</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+	
 	</build>
 
 </project>
