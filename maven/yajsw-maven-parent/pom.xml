@@ -4,11 +4,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<space>&#0020;</space>
-		<lf>&#0010;
-		</lf>
+		<lf>&#0010;</lf>
 		<cr>&#0014;</cr>
+		<bs>&#0092;</bs>
 		<linesep>${line.separator}</linesep>
 		<yajsw-version>0.0.1</yajsw-version>
+		<MANIFEST>${basedir}/MANIFEST.MF</MANIFEST>
 	</properties>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.rzo</groupId>
@@ -40,13 +41,7 @@
 	<build>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.3</version>
-					<!-- <configuration> <descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> 
-						</descriptorRefs> </configuration> -->
-				</plugin>
+
 
 
 
@@ -185,7 +180,7 @@
 
 
 
-				<!-- <plugin>
+				 <plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
 					<version>2.4</version>
@@ -197,6 +192,7 @@
 								<goal>build-classpath</goal>
 							</goals>
 							<configuration>
+								<excludeTransitive>true</excludeTransitive>
 								<attach>true</attach>
 								<localRepoProperty>../lib</localRepoProperty>
 								<pathSeparator>$${pathDelim}</pathSeparator>
@@ -226,6 +222,7 @@
 										<string>wrapper.core.classpath=</string>
 										<filelist dir="${basedir}/target/assembly" files="classPath" />
 									</concat>
+									<replace file="${cp.props}" token="${bs}" value="/" />
 									<property file="${cp.props}" />
 									<echo file="${MANIFEST}"
 										message="Manifest-Version: 1.0
@@ -233,7 +230,7 @@
 						${ls}Class-Path-Wrapper-Extended: ${ls} ${wrapper.core.classpath}${ls}
 						${ls}Class-Path-App: ${ls} ${wrapper.core.classpath}${ls}
 						${ls}Main-Class: org.rzo.yajsw.boot.WrapperExeBooter${ls}" />
-									<replace file="${MANIFEST}" token="${pathDelim}" value=" " />
+									<replace file="${MANIFEST}" token="${pathDelim}" value="${linesep} " />
 								</target>
 							</configuration>
 							<goals>
@@ -271,10 +268,10 @@
 							<manifestFile>${MANIFEST}</manifestFile>
 						</archive>
 					</configuration>
-				</plugin> -->
-				<!-- <plugin>
+				</plugin> 
+				 <plugin>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>2.1</version>
+					<version>2.3</version>
 					<executions>
 						<execution>
 							<id>package-with-dependencies</id>
@@ -294,7 +291,7 @@
 						</archive>
 					</configuration>
 
-				</plugin> -->
+				</plugin> 
 			</plugins>
 		</pluginManagement>
 		<plugins>

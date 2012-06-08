@@ -17,12 +17,15 @@
 			<artifactId>yajsw-base</artifactId>
 		
 		</dependency>
+		 
 		<dependency>
 			<groupId>org.rzo</groupId>
 			<artifactId>yajsw-core-deps</artifactId>
+			<classifier>distribution</classifier>
 			<version>0.0.1</version>
-			<classifier>jar-with-dependencies</classifier>
+			<scope>runtime</scope>
 		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>
@@ -50,10 +53,10 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
+				
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
+				
+				<!-- <executions>
 					<execution>
 						<id>compile</id>
 						<phase>compile</phase>
@@ -81,11 +84,11 @@
 							<goal>run</goal>
 						</goals>
 					</execution>
-				</executions>
+				</executions> -->
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
+				<!-- <executions>
 					<execution>
 						<id>package-with-dependencies</id>
 						<phase>package</phase>
@@ -104,7 +107,7 @@
 
 					</archive>
 				</configuration>
-
+ -->
 			</plugin>
 			
 		</plugins>

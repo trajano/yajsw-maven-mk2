@@ -18,6 +18,7 @@
 			<groupId>commons-daemon</groupId>
 			<artifactId>commons-daemon</artifactId>
 			<version>1.0.10</version>
+
 		</dependency>
 
 		<dependency>
@@ -118,6 +119,47 @@
 	</dependencies>
 	<build>
 		<plugins>
+		
+			
+			<plugin>
+					<artifactId>maven-dependency-plugin</artifactId>
+				
+					
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>compile</id>
+							<phase>compile</phase>
+							<configuration>
+								<target>
+									<property name="cp.props"
+										value="${basedir}/target/assembly/classPath.properties" />
+									<property name="ls" value="${line.separator}" />
+
+									<concat destfile="${cp.props}">
+										<string>wrapper.core.classpath=</string>
+										<filelist dir="${basedir}/target/assembly" files="classPath" />
+									</concat>
+									<replace file="${cp.props}" token="${bs}" value="/" />
+									<property file="${cp.props}" />
+									<echo file="${MANIFEST}"
+										message="Manifest-Version: 1.0
+						${ls}Class-Path-Wrapper-Core: ${ls} ${wrapper.core.classpath}${ls}
+						${ls}Class-Path-Wrapper-Extended: ${ls} ${wrapper.core.classpath}${ls}
+						${ls}Class-Path-App: ${ls} ${wrapper.core.classpath}${ls}
+						${ls}Main-Class: org.rzo.yajsw.boot.WrapperExeBooter${ls}" />
+									<replace file="${MANIFEST}" token="${pathDelim}" value="${linesep} " />
+								</target>
+							</configuration>
+							<goals>
+								<goal>run</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
@@ -132,8 +174,8 @@
 					</execution>
 				</executions>
 				<configuration>
-
-					<descriptorRefs><descriptorRef>jar-with-dependencies</descriptorRef></descriptorRefs>
+					<descriptor>${basedir}/src/assemble/bin.xml</descriptor>
+					<!-- <descriptorRefs><descriptorRef>jar-with-dependencies</descriptorRef></descriptorRefs>-->
 
 				</configuration>
 			</plugin>
