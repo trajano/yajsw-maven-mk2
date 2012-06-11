@@ -13,8 +13,9 @@ cd "$current"
 
 wrapper_home="$PRGDIR"/..
 export wrapper_home
-wrapper_name="yajsw-11.0"
-wrapper_jar="$wrapper_home"/target/${wrapper_name}-distribution.jar
+yajsw_version="0.0.1"
+wrapper_name="yajsw-core-"${yajsw_version}
+wrapper_jar="$wrapper_home"/../yajsw-core/target/${wrapper_name}-distribution.jar
 export wrapper_jar
 
 wrapper_app_jar=${wrapper_jar}
