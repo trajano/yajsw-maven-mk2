@@ -2,14 +2,19 @@ package org.rzo.yajsw.tools;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.rzo.yajsw.os.OperatingSystem;
 import org.rzo.yajsw.os.Process;
 
 public class ConfigGenerator
 {
+	private static final String WRAPPER_APP_PARAMETER = "wrapper.app.parameter.";
+
 	private static void usage()
 	{
 		System.out.println("Usage: java -cp wrapper.jar org.rzo.yajsw.ConfigurationGenerator <pid> <output file>");
@@ -17,6 +22,10 @@ public class ConfigGenerator
 	}
 
 	public static void generate(int pid, File input, File output)
+	{
+		generate(pid,input,output, new java.util.HashMap<String, String>());
+	}
+	public static void generate(int pid, File input, File output, java.util.Map<String, String> map)
 	{
 		Process p = OperatingSystem.instance().processManagerInstance().getProcess(pid);
 		if (p == null)
@@ -123,152 +132,7 @@ public class ConfigGenerator
 
 		try
 		{
-			String workingDir = p.getWorkingDir();
-			String cmd = p.getCommand();
-
-			/*
-			 * MonitoredHost monitoredhost =
-			 * MonitoredHost.getMonitoredHost("//localhost"); VmIdentifier
-			 * vmidentifier = new VmIdentifier("" + p.getPid()); MonitoredVm vm
-			 * = monitoredhost.getMonitoredVm(vmidentifier, 0);
-			 */
-
-			// System.out.println("cmd " +MonitoredVmUtil.commandLine(vm));
-			PropertiesConfiguration conf;
-			if (input == null)
-				conf = new PropertiesConfiguration();
-			else
-				conf = new PropertiesConfiguration(input);
-
-			JCLParser parsedCmd = JCLParser.parse(cmd);
-			/*
-			 * String mainClass = MonitoredVmUtil.mainClass(vm, true); if
-			 * (!isNotNullEmpty(mainClass)) {System.out.println(
-			 * "could not retrieve main class of java application -> abort");
-			 * return; } mainClass = confString(mainClass); if
-			 * (mainClass.endsWith(".jar"))
-			 * conf.setProperty("wrapper.java.app.jar",
-			 * relativeString(mainClass, workingDir)); else
-			 * conf.setProperty("wrapper.java.app.mainclass", mainClass);
-			 */
-			if (parsedCmd.getMainClass() != null)
-				conf.setProperty("wrapper.java.app.mainclass", parsedCmd.getMainClass());
-			else
-				conf.setProperty("wrapper.java.app.jar", relativeString(parsedCmd.getJar(), workingDir));
-
-			/*
-			 * // this does not seem to work correctly -> get jvm the hard way
-			 * // System.out.println("vmVersion " + vmVersion); String jvm =
-			 * null; if (cmd.startsWith("\"")) jvm = cmd.substring(0,
-			 * cmd.indexOf("\" ") + 1); else jvm = cmd.substring(0,
-			 * cmd.indexOf(" ")); if (isNotNullEmpty(jvm)) { jvm =
-			 * confString(jvm); conf.setProperty("wrapper.java.command", jvm); }
-			 */
-			conf.setProperty("wrapper.java.command", parsedCmd.getJava());
-			/*
-			 * String classpath = ((StringMonitor)
-			 * vm.findByName("java.property.java.class.path")).stringValue(); if
-			 * (isNotNullEmpty(classpath)) { classpath =
-			 * relativeString(classpath, workingDir); classpath =
-			 * confString(classpath); String[] classpaths =
-			 * classpath.split(System.getProperty("path.separator")); int i = 1;
-			 * for (String file : classpaths) {
-			 * conf.setProperty("wrapper.java.classpath." + i, file); i++; } }
-			 */
-			int i = 1;
-			List<String> classpathList = parsedCmd.getClasspath();
-			// no longer required - wrapper will automatically add the jar to the classpath
-			//if (conf.getString("wrapper.java.app.jar", null) != null)
-			//	classpathList.add(conf.getString("wrapper.java.app.jar"));
-			if (classpathList == null || classpathList.isEmpty())
-				classpathList = getClasspathFromEnvironment(p);
-			if (classpathList.isEmpty() && parsedCmd.getJar() == null)
-				classpathList.add(".");
-			for (String classpath : classpathList)
-			{
-				classpath = relativeString(classpath, workingDir);
-				classpath = confString(classpath);
-				// yajsw handles wildcards differently.
-				if (classpath.endsWith("*"))
-					classpath = classpath + ".jar";
-				conf.setProperty("wrapper.java.classpath." + i++, classpath);
-			}
-
-			/*
-			 * // bug in MonitoredVMUtil 'c:/x.txt "d d"' returns 'c:/x.txt d d'
-			 * //String mainArgs = MonitoredVmUtil.mainArgs(vm); // TODO really
-			 * parse the cmd String mainArgs =
-			 * cmd.substring(cmd.indexOf(" "+mainClass
-			 * +" ")+mainClass.length()+2); if (isNotNullEmpty(mainArgs)) { List
-			 * args = splitArgs(mainArgs); int i = 1; for (Iterator
-			 * it=args.iterator(); it.hasNext(); ) { String arg = (String)
-			 * it.next(); arg = relativeString(arg, workingDir); arg =
-			 * confString(arg); conf.setProperty("wrapper.app.parameter."+i++,
-			 * arg); } }
-			 */
-
-			i = 1;
-			for (String arg : parsedCmd.getArgs())
-			{
-				arg = relativeString(arg, workingDir);
-				arg = confString(arg);
-				conf.setProperty("wrapper.app.parameter." + i++, arg);
-			}
-			/*
-			 * // bug in MonitoredVMUtil '"-Xd=a a"' returns '-Xd=a a' //String
-			 * jvmArgs = MonitoredVmUtil.jvmArgs(vm); // TODO really parse the
-			 * cmd String jvmArgs = cmd.substring(jvm.length(),
-			 * cmd.indexOf(" "+mainClass+" ")); if (cmd.startsWith("\""))
-			 * jvmArgs = jvmArgs.substring(1); jvmArgs =
-			 * jvmArgs.replace(classpath, ""); jvmArgs =
-			 * jvmArgs.replace(" -classpath ", ""); jvmArgs =
-			 * jvmArgs.replace(" -cp ", "");
-			 * 
-			 * if (isNotNullEmpty(jvmArgs)) { List args = splitArgs(jvmArgs);
-			 * int i = 1; for (Iterator it=args.iterator(); it.hasNext(); ) {
-			 * String arg = (String) it.next(); arg = relativeString(arg,
-			 * workingDir); arg = confString(arg);
-			 * conf.setProperty("wrapper.java.additional."+i++, arg); } }
-			 * 
-			 * String jvmFlags = MonitoredVmUtil.jvmFlags(vm);
-			 */
-			i = 1;
-			for (String opt : parsedCmd.getVmOptions())
-			{
-				opt = relativeString(opt, workingDir);
-				opt = confString(opt);
-				conf.setProperty("wrapper.java.additional." + i++, opt);
-			}
-
-			if (isNotNullEmpty(workingDir))
-			{
-				workingDir = confString(workingDir);
-				conf.setProperty("wrapper.working.dir", workingDir);
-			}
-			String title = p.getTitle();
-			if (cmd.equals(title))
-				title = parsedCmd.getMainClass();
-
-			if (isNotNullEmpty(title))
-			{
-				title = confString(title);
-				conf.setProperty("wrapper.console.title", title);
-				conf.setProperty("wrapper.ntservice.name", title);
-				conf.setProperty("wrapper.ntservice.displayname", title);
-				conf.setProperty("wrapper.ntservice.description", title);
-			}
-			/*
-			 * String account = p.getUser(); if (account != null &&
-			 * !"".equals(account)) conf.setProperty("wrapper.app.account",
-			 * account);
-			 */
-
-			/*
-			 * List l = vm.findByPattern(".*"); for (Iterator it = l.iterator();
-			 * it.hasNext(); ) { Monitor m = (Monitor) it.next();
-			 * System.out.println(m.getName()); System.out.println("> "+
-			 * m.getValue()); }
-			 */
+			PropertiesConfiguration conf = generateConfFromProcess(p, input, true);
 
 			conf.save(output);
 		}
@@ -277,6 +141,201 @@ public class ConfigGenerator
 			ex.printStackTrace();
 		}
 
+	}
+	
+	/**
+	 * @param p
+	 * @param input
+	 * @return
+	 * @throws ConfigurationException
+	 */
+	public static PropertiesConfiguration generateConfFromProcess(Process p,
+			File input, boolean includeArgs) throws ConfigurationException {
+		String workingDir = p.getWorkingDir();
+		String cmd = p.getCommand();
+
+		/*
+		 * MonitoredHost monitoredhost =
+		 * MonitoredHost.getMonitoredHost("//localhost"); VmIdentifier
+		 * vmidentifier = new VmIdentifier("" + p.getPid()); MonitoredVm vm
+		 * = monitoredhost.getMonitoredVm(vmidentifier, 0);
+		 */
+
+		// System.out.println("cmd " +MonitoredVmUtil.commandLine(vm));
+		PropertiesConfiguration conf;
+		if (input == null)
+			conf = new PropertiesConfiguration();
+		else
+			conf = new PropertiesConfiguration(input);
+
+		JCLParser parsedCmd = JCLParser.parse(cmd);
+		/*
+		 * String mainClass = MonitoredVmUtil.mainClass(vm, true); if
+		 * (!isNotNullEmpty(mainClass)) {System.out.println(
+		 * "could not retrieve main class of java application -> abort");
+		 * return; } mainClass = confString(mainClass); if
+		 * (mainClass.endsWith(".jar"))
+		 * conf.setProperty("wrapper.java.app.jar",
+		 * relativeString(mainClass, workingDir)); else
+		 * conf.setProperty("wrapper.java.app.mainclass", mainClass);
+		 */
+		if (parsedCmd.getMainClass() != null)
+			conf.setProperty("wrapper.java.app.mainclass", parsedCmd.getMainClass());
+		else
+			conf.setProperty("wrapper.java.app.jar", relativeString(parsedCmd.getJar(), workingDir));
+
+		/*
+		 * // this does not seem to work correctly -> get jvm the hard way
+		 * // System.out.println("vmVersion " + vmVersion); String jvm =
+		 * null; if (cmd.startsWith("\"")) jvm = cmd.substring(0,
+		 * cmd.indexOf("\" ") + 1); else jvm = cmd.substring(0,
+		 * cmd.indexOf(" ")); if (isNotNullEmpty(jvm)) { jvm =
+		 * confString(jvm); conf.setProperty("wrapper.java.command", jvm); }
+		 */
+		conf.setProperty("wrapper.java.command", parsedCmd.getJava());
+		/*
+		 * String classpath = ((StringMonitor)
+		 * vm.findByName("java.property.java.class.path")).stringValue(); if
+		 * (isNotNullEmpty(classpath)) { classpath =
+		 * relativeString(classpath, workingDir); classpath =
+		 * confString(classpath); String[] classpaths =
+		 * classpath.split(System.getProperty("path.separator")); int i = 1;
+		 * for (String file : classpaths) {
+		 * conf.setProperty("wrapper.java.classpath." + i, file); i++; } }
+		 */
+		int i = 1;
+		List<String> classpathList = parsedCmd.getClasspath();
+		// no longer required - wrapper will automatically add the jar to the classpath
+		//if (conf.getString("wrapper.java.app.jar", null) != null)
+		//	classpathList.add(conf.getString("wrapper.java.app.jar"));
+		if (classpathList == null || classpathList.isEmpty())
+			classpathList = getClasspathFromEnvironment(p);
+		if (classpathList.isEmpty() && parsedCmd.getJar() == null)
+			classpathList.add(".");
+		for (String classpath : classpathList)
+		{
+			classpath = relativeString(classpath, workingDir);
+			classpath = confString(classpath);
+			// yajsw handles wildcards differently.
+			if (classpath.endsWith("*"))
+				classpath = classpath + ".jar";
+			conf.setProperty("wrapper.java.classpath." + i++, classpath);
+		}
+
+		/*
+		 * // bug in MonitoredVMUtil 'c:/x.txt "d d"' returns 'c:/x.txt d d'
+		 * //String mainArgs = MonitoredVmUtil.mainArgs(vm); // TODO really
+		 * parse the cmd String mainArgs =
+		 * cmd.substring(cmd.indexOf(" "+mainClass
+		 * +" ")+mainClass.length()+2); if (isNotNullEmpty(mainArgs)) { List
+		 * args = splitArgs(mainArgs); int i = 1; for (Iterator
+		 * it=args.iterator(); it.hasNext(); ) { String arg = (String)
+		 * it.next(); arg = relativeString(arg, workingDir); arg =
+		 * confString(arg); conf.setProperty("wrapper.app.parameter."+i++,
+		 * arg); } }
+		 */
+
+		
+		setArgsUnsafe(conf, parsedCmd.getArgs(),workingDir);
+		/*
+		 * // bug in MonitoredVMUtil '"-Xd=a a"' returns '-Xd=a a' //String
+		 * jvmArgs = MonitoredVmUtil.jvmArgs(vm); // TODO really parse the
+		 * cmd String jvmArgs = cmd.substring(jvm.length(),
+		 * cmd.indexOf(" "+mainClass+" ")); if (cmd.startsWith("\""))
+		 * jvmArgs = jvmArgs.substring(1); jvmArgs =
+		 * jvmArgs.replace(classpath, ""); jvmArgs =
+		 * jvmArgs.replace(" -classpath ", ""); jvmArgs =
+		 * jvmArgs.replace(" -cp ", "");
+		 * 
+		 * if (isNotNullEmpty(jvmArgs)) { List args = splitArgs(jvmArgs);
+		 * int i = 1; for (Iterator it=args.iterator(); it.hasNext(); ) {
+		 * String arg = (String) it.next(); arg = relativeString(arg,
+		 * workingDir); arg = confString(arg);
+		 * conf.setProperty("wrapper.java.additional."+i++, arg); } }
+		 * 
+		 * String jvmFlags = MonitoredVmUtil.jvmFlags(vm);
+		 */
+		i = 1;
+		for (String opt : parsedCmd.getVmOptions())
+		{
+			opt = relativeString(opt, workingDir);
+			opt = confString(opt);
+			conf.setProperty("wrapper.java.additional." + i++, opt);
+		}
+
+		if (isNotNullEmpty(workingDir))
+		{
+			workingDir = confString(workingDir);
+			conf.setProperty("wrapper.working.dir", workingDir);
+		}
+		String title = p.getTitle();
+		if (cmd.equals(title))
+			title = parsedCmd.getMainClass();
+
+		if (isNotNullEmpty(title))
+		{
+			title = confString(title);
+			conf.setProperty("wrapper.console.title", title);
+			conf.setProperty("wrapper.ntservice.name", title);
+			conf.setProperty("wrapper.ntservice.displayname", title);
+			conf.setProperty("wrapper.ntservice.description", title);
+		}
+		/*
+		 * String account = p.getUser(); if (account != null &&
+		 * !"".equals(account)) conf.setProperty("wrapper.app.account",
+		 * account);
+		 */
+
+		/*
+		 * List l = vm.findByPattern(".*"); for (Iterator it = l.iterator();
+		 * it.hasNext(); ) { Monitor m = (Monitor) it.next();
+		 * System.out.println(m.getName()); System.out.println("> "+
+		 * m.getValue()); }
+		 */
+		return conf;
+	}
+
+	/**
+	 * @param workingDir
+	 * @param conf
+	 * @param parsedCmd
+	 */
+	private static void setArgsUnsafe(
+			PropertiesConfiguration conf, List<String> args, String workingDir) {
+		int i=1;
+		for (String arg : args)
+		{
+			arg = relativeString(arg, workingDir);
+			arg = confString(arg);
+			conf.setProperty(WRAPPER_APP_PARAMETER + i++, arg);
+		}
+	}
+	
+	/**
+	 * @param workingDir
+	 * @param conf
+	 * @param parsedCmd
+	 */
+	public static void setArgs(PropertiesConfiguration conf,List<String> args, String workingDir)
+	{
+		clearArgs(conf, 1);
+		setArgsUnsafe(conf,args,workingDir);
+	}
+	/**
+	 * @param conf
+	 * @param i
+	 */
+	private static void clearArgs(PropertiesConfiguration conf, int i) {
+		Properties props;
+		do
+		{
+			props=conf.getProperties(WRAPPER_APP_PARAMETER+ i);
+			if (props.isEmpty()) break;
+			for (Enumeration<?> e=props.propertyNames();e.hasMoreElements();)
+			{
+				conf.clearProperty(e.nextElement().toString());
+			}
+		}while(true);
 	}
 
 	private static List<String> getClasspathFromEnvironment(Process p)
@@ -369,5 +428,7 @@ public class ConfigGenerator
 	{
 		return str != null && !"".equals(str) && !"Unknown".equals(str);
 	}
+
+
 
 }
