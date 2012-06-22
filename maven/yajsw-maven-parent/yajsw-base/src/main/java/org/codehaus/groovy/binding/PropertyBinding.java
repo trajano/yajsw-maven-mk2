@@ -47,7 +47,7 @@ import java.util.concurrent.Executors;
 /**
  * @author <a href="mailto:shemnon@yahoo.com">Danno Ferrin</a>
  * @author Andres Almiray
- * @version $Revision$
+ * @version $Revision: 1.1 $
  * @since Groovy 1.1
  */
 public class PropertyBinding implements SourceBinding, TargetBinding, TriggerBinding {

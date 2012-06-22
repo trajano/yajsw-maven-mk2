@@ -81,7 +81,7 @@ import org.apache.commons.logging.impl.NoOpLog;
  * @author <a href="mailto:ksh@scand.com">Konstantin Shaposhnikov </a>
  * @author Oliver Heger
  * @author <a href="mailto:hps@intermeta.de">Henning P. Schmiedehausen </a>
- * @version $Id: AbstractConfiguration.java 730776 2009-01-02 16:37:12Z oheger $
+ * @version $Id: AbstractConfiguration.java,v 1.1 2012-06-19 10:36:41 ellisb Exp $
  */
 public abstract class AbstractConfiguration extends EventSource implements Configuration
 {
