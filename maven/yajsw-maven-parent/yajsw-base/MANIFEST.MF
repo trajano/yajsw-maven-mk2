@@ -1,0 +1,11 @@
+Manifest-Version: 1.0           
+Class-Path-Wrapper-Core: 
+ /home/aculab/git/yajsw-maven-mk2.5/maven/yajsw-maven-parent/yajsw-core-deps/target/yajsw-core-deps-0.0.1.jar
+           
+Class-Path-Wrapper-Extended: 
+ /home/aculab/git/yajsw-maven-mk2.5/maven/yajsw-maven-parent/yajsw-core-deps/target/yajsw-core-deps-0.0.1.jar
+           
+Class-Path-App: 
+ /home/aculab/git/yajsw-maven-mk2.5/maven/yajsw-maven-parent/yajsw-core-deps/target/yajsw-core-deps-0.0.1.jar
+           
+Main-Class: org.rzo.yajsw.boot.WrapperExeBooter
