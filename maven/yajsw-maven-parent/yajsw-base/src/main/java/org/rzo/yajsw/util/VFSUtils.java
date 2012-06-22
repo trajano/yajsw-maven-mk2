@@ -1,29 +1,43 @@
 package org.rzo.yajsw.util;
 
-import org.apache.commons.vfs.FileObject;
-import org.apache.commons.vfs.FileSystemException;
-import org.apache.commons.vfs.FileSystemOptions;
-import org.apache.commons.vfs.VFS;
-import org.apache.commons.vfs.impl.DefaultFileSystemManager;
-import org.apache.commons.vfs.provider.http.HttpFileSystemConfigBuilder;
+import org.apache.commons.vfs2.FileName;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemOptions;
+import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.VFS;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
+import org.apache.commons.vfs2.impl.VirtualFileName;
+import org.apache.commons.vfs2.operations.FileOperationProvider;
+import org.apache.commons.vfs2.provider.AbstractFileName;
+import org.apache.commons.vfs2.provider.http.HttpFileSystemConfigBuilder;
+import org.apache.commons.vfs2.provider.jar.JarFileObject;
+import org.apache.commons.vfs2.provider.jar.JarFileProvider;
+import org.apache.commons.vfs2.provider.jar.JarFileSystem;
+import org.apache.commons.vfs2.provider.local.DefaultLocalFileProvider;
+import org.apache.commons.vfs2.provider.local.LocalFileName;
+import org.apache.commons.vfs2.provider.res.ResourceFileProvider;
 
 public class VFSUtils
 {
 	static DefaultFileSystemManager	fsManager	= null;
 	static FileSystemOptions		opts		= new FileSystemOptions();
-
+	static FileObject res;
+	
 	public static void init() throws FileSystemException
 	{
 		if (fsManager != null)
 			return;
-
+		
 		fsManager = (DefaultFileSystemManager) VFS.getManager();
+		res=fsManager.resolveFile("res:resources");
 		String httpProxy = System.getProperty("http.proxyHost");
 		String httpPort = System.getProperty("http.proxyPort");
+		
+		
 		if (httpProxy != null)
 		{
 			HttpFileSystemConfigBuilder.getInstance().setProxyHost(opts, httpProxy);
-
 			int port = 8080;
 			if (httpPort != null)
 				try
@@ -36,24 +50,84 @@ public class VFSUtils
 				}
 			HttpFileSystemConfigBuilder.getInstance().setProxyPort(opts, port);
 		}
+		
+		///JarFileProvider jfp=new JarFileProvider();
+		//DefaultLocalFileProvider dfp=new DefaultLocalFileProvider();
+		//dfp.init();
+		try{
+		//File yajswjar=new File("C:/Users/Administrator/git/yajsw-maven-mk2/maven/yajsw-maven-parent/yajsw-core/target/yajsw-core-0.0.1-distribution.jar");
+		//FileObject jfn=dfp.findLocalFile(yajswjar);
+		//JarFileObject jfo=new JarFileObject(jfn.getName(),new ZipEntry("/"));
+		//FileObject rfpfo=fsManager.createVirtualFileSystem("res:///");
+		
+		
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	
 	}
 
 	public static FileObject resolveFile(String base, String file) throws FileSystemException
 	{
 		init();
-		FileObject basef = null;
+		FileObject basef = null, basefUp =null;
 		if (base != null)
+		{
 			basef = fsManager.resolveFile(new File("."), base);
-		return resolveFile(basef, file);
-	}
+			basefUp=fsManager.resolveFile(new File("../../yajsw-base/"),base);
+		}
+		
+		FileObject result=resolveFile(new FileObject[]{basef,basefUp}, file);
+		
+		return result;
 
+	}
+	private static boolean isReal(FileObject fo) throws FileSystemException
+	{
+		return fo!=null && fo.getType()!=FileType.IMAGINARY;
+	}
 	public static FileObject resolveFile(FileObject basef, String file) throws FileSystemException
 	{
+		return resolveFile(new FileObject[]{basef},file);
+	}
+	public static FileObject resolveFile(FileObject[] baseflist, String file) throws FileSystemException
+	{
 		init();
+		FileObject result=null;
+		for (FileObject basef: baseflist)
+		{
+			FileObject resultTemp = resolveFileFinal(basef, file);
+			if (isReal(resultTemp))
+			{
+				result=resultTemp;
+				break;
+			
+			}
+		}
+		
+		if (!isReal(result))
+		{
+			FileObject resultRes=res.resolveFile(file);
+			if (isReal(resultRes)) result=resultRes;
+		}
+
+		return result;
+	}
+
+	private static FileObject resolveFileFinal(FileObject basef, String file)
+			throws FileSystemException {
+		FileObject result;
 		if (basef != null)
-			return fsManager.resolveFile(basef, file, opts);
+		{
+			result=fsManager.resolveFile(basef, file, opts);
+		}
 		else
-			return fsManager.resolveFile(file, opts);
+		{
+			result=fsManager.resolveFile(file, opts);
+		}
+		return result;
 	}
 
 }

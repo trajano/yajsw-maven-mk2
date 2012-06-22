@@ -148,6 +148,12 @@ public class WrapperMainServiceWin extends Win32Service implements StopableServi
 		// init the service for signaling with services.exe. app will hang
 		// here until service is stopped
 		service.init();
+		try {
+			Thread.sleep(5000000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// service has terminated -> halt the wrapper jvm
 		w.getWrapperLogger().info("Win service: terminated correctly");
 		Runtime.getRuntime().halt(0);
