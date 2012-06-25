@@ -132,7 +132,7 @@ public class ConfigGenerator
 
 		try
 		{
-			PropertiesConfiguration conf = generateConfFromProcess(p, input, true);
+			PropertiesConfiguration conf = generateConfFromProcess(p, input, true, true);
 
 			conf.save(output);
 		}
@@ -146,11 +146,12 @@ public class ConfigGenerator
 	/**
 	 * @param p
 	 * @param input
+	 * @param updateTitles 
 	 * @return
 	 * @throws ConfigurationException
 	 */
 	public static PropertiesConfiguration generateConfFromProcess(Process p,
-			File input, boolean includeArgs) throws ConfigurationException {
+			File input, boolean includeArgs, boolean updateTitles) throws ConfigurationException {
 		String workingDir = p.getWorkingDir();
 		String cmd = p.getCommand();
 
@@ -236,7 +237,10 @@ public class ConfigGenerator
 		 */
 
 		
-		setArgsUnsafe(conf, parsedCmd.getArgs(),workingDir);
+		if (includeArgs)
+		{
+			setArgsUnsafe(conf, parsedCmd.getArgs(),workingDir);
+		}
 		/*
 		 * // bug in MonitoredVMUtil '"-Xd=a a"' returns '-Xd=a a' //String
 		 * jvmArgs = MonitoredVmUtil.jvmArgs(vm); // TODO really parse the
@@ -272,7 +276,7 @@ public class ConfigGenerator
 		if (cmd.equals(title))
 			title = parsedCmd.getMainClass();
 
-		if (isNotNullEmpty(title))
+		if (isNotNullEmpty(title) && updateTitles)
 		{
 			title = confString(title);
 			conf.setProperty("wrapper.console.title", title);
