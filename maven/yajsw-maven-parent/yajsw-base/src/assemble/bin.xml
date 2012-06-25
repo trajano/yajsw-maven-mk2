@@ -11,7 +11,6 @@
 
   <dependencySets>
     <dependencySet>
-    	<useTransitiveDependencies>false</useTransitiveDependencies>
     <outputDirectory>/</outputDirectory>
       <unpack>true</unpack>
       <scope>runtime</scope>
@@ -19,19 +18,7 @@
   </dependencySets>
 <fileSets>
     <fileSet>
-    	<excludes>
-    		<exclude>src/**</exclude>
-			<exclude>target/**</exclude>
-			<exclude>build/**</exclude>
-		</excludes>
-<!--		<includes><include>**/*</include></includes>-->
-    	<outputDirectory>/resources</outputDirectory>
-      <directory>${basedir}</directory>
+      <directory>${basedir}/templates</directory>
     </fileSet>
-<!--    <fileSet>
-    	<outputDirectory>/resources/scripts</outputDirectory>
-      <directory>${basedir}/scripts</directory>
-    </fileSet>-->
-
   </fileSets> 
 </assembly>
