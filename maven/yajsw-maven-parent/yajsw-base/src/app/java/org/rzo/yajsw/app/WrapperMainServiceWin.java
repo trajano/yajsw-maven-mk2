@@ -149,7 +149,7 @@ public class WrapperMainServiceWin extends Win32Service implements StopableServi
 		// here until service is stopped
 		service.init();
 		try {
-			Thread.sleep(5000000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

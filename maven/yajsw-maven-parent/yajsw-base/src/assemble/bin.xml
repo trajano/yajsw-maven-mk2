@@ -24,9 +24,16 @@
 			<exclude>target/**</exclude>
 			<exclude>build/**</exclude>
 		</excludes>
-<!--		<includes><include>**/*</include></includes>-->
+
     	<outputDirectory>/resources</outputDirectory>
       <directory>${basedir}</directory>
+    </fileSet>
+	    <fileSet>
+    	<includes>
+    		<include>**</include>
+		</includes>
+    	<outputDirectory>/resources</outputDirectory>
+      <directory>${basedir}/src/main/java/resources</directory>
     </fileSet>
 <!--    <fileSet>
     	<outputDirectory>/resources/scripts</outputDirectory>

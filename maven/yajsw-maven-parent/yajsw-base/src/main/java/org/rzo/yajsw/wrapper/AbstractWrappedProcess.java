@@ -1654,7 +1654,7 @@ public abstract class AbstractWrappedProcess implements WrappedProcess, Constant
 		}
 		this.getWrapperLogger().info("found script " + s.getScript());
 		// final String id = key;
-
+		final Logger wl=this.getWrapperLogger();
 		return new TriggerAction()
 		{
 			public Object execute(final String line)
@@ -1665,6 +1665,7 @@ public abstract class AbstractWrappedProcess implements WrappedProcess, Constant
 					public void run()
 					{
 						AbstractWrappedProcess.this.getWrapperLogger().info("start script " + s.getScript());
+						wl.severe("running script "+line+" with "+s.toString());
 						s.executeWithTimeout(new String(line));
 						AbstractWrappedProcess.this.getWrapperLogger().info("end script " + s.getScript());
 					}
