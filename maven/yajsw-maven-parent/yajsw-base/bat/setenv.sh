@@ -22,7 +22,7 @@ wrapper_app_jar=${wrapper_jar}
 #"$wrapper_home"/target/yajsw-11.0-distribution.jar
 export wrapper_app_jar
 
-wrapper_java_options=-Xmx15m
+wrapper_java_options=-Xmx90m
 export wrapper_java_options
 
 java_exe=java
