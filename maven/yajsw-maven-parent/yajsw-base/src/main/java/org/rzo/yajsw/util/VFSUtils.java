@@ -23,6 +23,7 @@ public class VFSUtils
 	static DefaultFileSystemManager	fsManager	= null;
 	static FileSystemOptions		opts		= new FileSystemOptions();
 	static FileObject res;
+	static String yajswBase;
 	
 	public static void init() throws FileSystemException
 	{
@@ -33,8 +34,8 @@ public class VFSUtils
 		res=fsManager.resolveFile("res:resources");
 		String httpProxy = System.getProperty("http.proxyHost");
 		String httpPort = System.getProperty("http.proxyPort");
-		
-		
+		yajswBase = System.getProperty("wrapper.base.dir", "../../yajsw-base/");
+			
 		if (httpProxy != null)
 		{
 			HttpFileSystemConfigBuilder.getInstance().setProxyHost(opts, httpProxy);
@@ -76,7 +77,7 @@ public class VFSUtils
 		if (base != null)
 		{
 			basef = fsManager.resolveFile(new File("."), base);
-			basefUp=fsManager.resolveFile(new File("../../yajsw-base/"),base);
+			basefUp=fsManager.resolveFile(new File(yajswBase),base);
 		}
 		
 		FileObject result=resolveFile(new FileObject[]{basef,basefUp}, file);

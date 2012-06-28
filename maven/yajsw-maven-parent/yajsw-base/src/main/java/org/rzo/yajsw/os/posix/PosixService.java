@@ -73,7 +73,11 @@ public class PosixService extends AbstractService implements Constants
 		String wrapperHome = ".";
 		try
 		{
-			wrapperHome = new File(wrapperJar).getParentFile().getCanonicalPath();
+			wrapperHome=_config.getString("wrapper.base.dir","");
+			if (wrapperHome.isEmpty())
+			{
+				wrapperHome = new File(wrapperJar).getParentFile().getCanonicalPath();
+			}
 		}
 		catch (IOException e1)
 		{
