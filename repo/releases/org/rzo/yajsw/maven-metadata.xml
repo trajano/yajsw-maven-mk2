@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.rzo</groupId>
+  <artifactId>yajsw</artifactId>
+  <versioning>
+    <latest>11.0-ACULAB</latest>
+    <release>11.0-ACULAB</release>
+    <versions>
+      <version>11.0</version>
+      <version>11.0-ACULAB</version>
+    </versions>
+    <lastUpdated>20120412160647</lastUpdated>
+  </versioning>
+</metadata>

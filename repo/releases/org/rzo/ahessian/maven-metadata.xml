@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.rzo</groupId>
+  <artifactId>ahessian</artifactId>
+  <versioning>
+    <latest>yajsw.11.0</latest>
+    <release>yajsw.11.0</release>
+    <versions>
+      <version>yajsw.11.0</version>
+    </versions>
+    <lastUpdated>20120412115208</lastUpdated>
+  </versioning>
+</metadata>
