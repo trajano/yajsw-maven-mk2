@@ -19,6 +19,11 @@
 		<!-- <repository> <id>Releases</id> <url>http://192.168.6.242:8082/nexus/content/repositories/releases</url> 
 			</repository> <repository> <id>Apache Snapshots Proxy</id> <url>http://192.168.6.242:8082/nexus/content/repositories/apache-snapshots/</url> 
 			</repository> -->
+			<repository>
+			<id>Releases</id>
+			<url>https://raw.github.com/griels/yajsw-maven-mk2/gh-pages/repo/releases</url>
+			
+			</repository>
 		<repository>
 			<id>Apache Snapshots</id>
 			<url>https://repository.apache.org/content/groups/snapshots/</url>
@@ -187,7 +192,7 @@
 							<configuration>
 								<excludeTransitive>true</excludeTransitive>
 								<attach>true</attach>
-								<!--<localRepoProperty>../lib</localRepoProperty>-->
+								<localRepoProperty>../lib</localRepoProperty>
 								<pathSeparator>$${pathDelim}</pathSeparator>
 
 								<outputFile>${basedir}/target/assembly/classPath</outputFile>
@@ -223,7 +228,7 @@
 						${ls}Class-Path-Wrapper-Extended: ${ls} ${wrapper.core.classpath}${ls}
 						${ls}Class-Path-App: ${ls} ${wrapper.core.classpath}${ls}
 						${ls}Main-Class: org.rzo.yajsw.boot.WrapperExeBooter${ls}" />
-									<replace file="${MANIFEST}" token="${pathDelim}" value=" ${linesep}  " />
+									<replace file="${MANIFEST}" token="${pathDelim}" value="${linesep} " />
 								</target>
 							</configuration>
 							<goals>
