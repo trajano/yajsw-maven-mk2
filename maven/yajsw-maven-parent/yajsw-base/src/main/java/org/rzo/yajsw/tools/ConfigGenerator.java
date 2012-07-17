@@ -1,6 +1,7 @@
 package org.rzo.yajsw.tools;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -152,6 +153,36 @@ public class ConfigGenerator
 	 */
 	public static PropertiesConfiguration generateConfFromProcess(Process p,
 			File input, boolean includeArgs, boolean updateTitles) throws ConfigurationException {
+
+		PropertiesConfiguration conf;
+		if (input == null)
+			conf = new PropertiesConfiguration();
+		else
+			conf = new PropertiesConfiguration(input);
+		
+		return updateConfWithProcessDetails(p, includeArgs, updateTitles, conf);
+	}
+	/**
+	 * @param p
+	 * @param input
+	 * @param updateTitles 
+	 * @return
+	 * @throws ConfigurationException
+	 */
+	public static PropertiesConfiguration generateConfFromProcess(Process p,
+			URL input, boolean includeArgs, boolean updateTitles) throws ConfigurationException {
+	
+		PropertiesConfiguration conf;
+		if (input == null)
+			conf = new PropertiesConfiguration();
+		else
+			conf = new PropertiesConfiguration(input);
+		
+		return updateConfWithProcessDetails(p, includeArgs, updateTitles, conf);
+	}
+	private static PropertiesConfiguration updateConfWithProcessDetails(
+			Process p, boolean includeArgs, boolean updateTitles,
+			PropertiesConfiguration conf) {
 		String workingDir = p.getWorkingDir();
 		String cmd = p.getCommand();
 
@@ -163,12 +194,6 @@ public class ConfigGenerator
 		 */
 
 		// System.out.println("cmd " +MonitoredVmUtil.commandLine(vm));
-		PropertiesConfiguration conf;
-		if (input == null)
-			conf = new PropertiesConfiguration();
-		else
-			conf = new PropertiesConfiguration(input);
-
 		JCLParser parsedCmd = JCLParser.parse(cmd);
 		/*
 		 * String mainClass = MonitoredVmUtil.mainClass(vm, true); if
@@ -432,6 +457,8 @@ public class ConfigGenerator
 	{
 		return str != null && !"".equals(str) && !"Unknown".equals(str);
 	}
+
+
 
 
 

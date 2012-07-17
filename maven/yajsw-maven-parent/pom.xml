@@ -331,4 +331,9 @@
 		<module>yajsw-core-deps</module>
 		<module>yajsw-core</module>
 	</modules>
+	<scm>
+		<url>scm:git:https://github.com/griels/yajsw-maven-mk2.git</url>
+		<connection>GitHub</connection>
+		<developerConnection>rzorzorzo(ron)/Ellis Breen</developerConnection>
+	</scm>
 </project>

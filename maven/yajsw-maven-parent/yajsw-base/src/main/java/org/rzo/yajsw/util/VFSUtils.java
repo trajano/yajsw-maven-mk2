@@ -1,5 +1,6 @@
 package org.rzo.yajsw.util;
 
+import org.apache.commons.vfs.cache.SoftRefFilesCache;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -17,6 +18,8 @@ import org.apache.commons.vfs2.provider.jar.JarFileSystem;
 import org.apache.commons.vfs2.provider.local.DefaultLocalFileProvider;
 import org.apache.commons.vfs2.provider.local.LocalFileName;
 import org.apache.commons.vfs2.provider.res.ResourceFileProvider;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class VFSUtils
 {
@@ -24,6 +27,7 @@ public class VFSUtils
 	static FileSystemOptions		opts		= new FileSystemOptions();
 	static FileObject res;
 	static String yajswBase;
+	private static boolean resolveRes=true;
 	
 	public static void init() throws FileSystemException
 	{
@@ -31,11 +35,18 @@ public class VFSUtils
 			return;
 		
 		fsManager = (DefaultFileSystemManager) VFS.getManager();
-		res=fsManager.resolveFile("res:resources");
 		String httpProxy = System.getProperty("http.proxyHost");
 		String httpPort = System.getProperty("http.proxyPort");
 		yajswBase = System.getProperty("wrapper.base.dir", "../../yajsw-base/");
-			
+		String jarResFlag=System.getProperty("wrapper.usejarresources");
+		resolveRes=(jarResFlag==null || !jarResFlag.equals("false"));
+		if (resolveRes)
+		{
+			Logger.getLogger(SoftRefFilesCache.class).setLevel(Level.ERROR);
+			Logger.getLogger(org.apache.commons.vfs2.cache.SoftRefFilesCache.class).setLevel(Level.ERROR);
+			res=fsManager.resolveFile("res:resources");
+			resolveRes=(res!=null);
+		}
 		if (httpProxy != null)
 		{
 			HttpFileSystemConfigBuilder.getInstance().setProxyHost(opts, httpProxy);
@@ -89,6 +100,29 @@ public class VFSUtils
 	{
 		return fo!=null && fo.getType()!=FileType.IMAGINARY;
 	}
+	private static FileObject realest(FileObject[] fo) throws FileSystemException
+	{
+		FileObject realest=null;
+		for (FileObject cand: fo)
+		{
+			if (cand!=null)
+			{
+				if (realest==null)
+				{
+					realest=cand;;
+				}
+				else
+				{
+					if (cand.getType()!=FileType.IMAGINARY)
+					{
+						realest=cand;
+						break;
+					}
+				}
+			}
+		}
+		return realest;
+	}
 	public static FileObject resolveFile(FileObject basef, String file) throws FileSystemException
 	{
 		return resolveFile(new FileObject[]{basef},file);
@@ -106,12 +140,16 @@ public class VFSUtils
 				break;
 			
 			}
+			else if (result==null)
+			{
+				result=resultTemp;
+			}
 		}
 		
-		if (!isReal(result))
+		if (!isReal(result) && resolveRes)
 		{
 			FileObject resultRes=res.resolveFile(file);
-			if (isReal(resultRes)) result=resultRes;
+			if (result==null || isReal(resultRes)) result=resultRes;
 		}
 
 		return result;

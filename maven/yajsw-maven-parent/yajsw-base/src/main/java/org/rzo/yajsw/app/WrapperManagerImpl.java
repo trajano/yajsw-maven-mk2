@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.ThreadMXBean;
@@ -77,6 +78,8 @@ import org.rzo.yajsw.script.ScriptFactory;
 import org.rzo.yajsw.util.Cycler;
 import org.rzo.yajsw.util.DaemonThreadFactory;
 import org.rzo.yajsw.wrapper.AlphanumComparator;
+
+import com.sun.management.HotSpotDiagnosticMXBean;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -1392,7 +1395,10 @@ public class WrapperManagerImpl implements WrapperManager, Constants, WrapperMan
 					if (!parent.exists())
 						parent.mkdirs();
 
-					com.sun.management.HotSpotDiagnosticMXBean mb = sun.management.ManagementFactory.getDiagnosticMXBean();
+					//com.sun.management.HotSpotDiagnosticMXBean mb = ManagementFactory.getDiagnosticMXBean();
+			        List<HotSpotDiagnosticMXBean> list =
+		            ManagementFactory.getPlatformMXBeans(HotSpotDiagnosticMXBean.class);
+			        HotSpotDiagnosticMXBean mb = list.get(0);
 					File dumpFile = new File(parent, file.getName());
 					mb.dumpHeap(dumpFile.getAbsolutePath(), true);
 					System.out.println("yajsw: dumpHeap done " + dumpFile.getAbsolutePath());
