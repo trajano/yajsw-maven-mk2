@@ -2,7 +2,7 @@ Maven port of yajsw.
 
 Official page: http://sf.net/projects/yajsw
 
-It should now install Abeille Forms and ahessian from the GitHub pages-hosted Maven repository on the gh-pages branch. No user-intervention required hopefully.
+It should now install Abeille Forms and ahessian from the GitHub pages-hosted Maven repository on the gh-pages branch. No user-intervention required hopefully. At some point hopefully everything will end up on Sonatype's Nexus repository.
 
 The yajsw-core:distribution artifact contains all the core code and dependencies in one uberjar.
 
