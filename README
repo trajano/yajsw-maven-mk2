@@ -9,3 +9,7 @@ The yajsw-core:distribution artifact contains all the core code and dependencies
 The yajsw-base artifact just contains the core code, and the yajsw-base-deps artifact refers to all the dependencies.
 
 The yajsw-parent artifact builds everything.
+
+There is some additional code to allow config autogeneration via an API, and loading resources directly from the jar. Hopefully at some point this will be wrapped in a Maven plugin.
+
+
