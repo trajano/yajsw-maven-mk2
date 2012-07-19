@@ -6,7 +6,7 @@ It should now install Abeille Forms and ahessian from the GitHub pages-hosted Ma
 
 The yajsw-core:distribution artifact contains all the core code and dependencies in one uberjar.
 
-The yajsw-base artifact just contains the core code, and the yajsw-base-deps artifact refers to all the dependencies.
+The yajsw-base artifact just contains the core code, and the yajsw-base-deps artifact refers to all the essential dependencies.
 
 The yajsw-parent artifact builds everything.
 
