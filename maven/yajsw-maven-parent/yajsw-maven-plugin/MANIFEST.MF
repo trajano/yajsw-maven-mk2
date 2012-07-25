@@ -1,0 +1,29 @@
+Manifest-Version: 1.0       
+Class-Path-Wrapper-Core: 
+ ../lib/org/apache/maven/maven-plugin-api/2.2.1/maven-plugin-api-2.2.1.jar
+ ../lib/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar
+ ../lib/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1.jar
+ ../lib/org/rzo/yajsw-core/0.0.1/yajsw-core-0.0.1-distribution.jar
+ ../lib/org/apache/maven/maven-model/2.2.1/maven-model-2.2.1.jar
+ ../lib/org/apache/maven/maven-artifact/2.2.1/maven-artifact-2.2.1.jar
+ ../lib/junit/junit/3.8.1/junit-3.8.1.jar
+       
+Class-Path-Wrapper-Extended: 
+ ../lib/org/apache/maven/maven-plugin-api/2.2.1/maven-plugin-api-2.2.1.jar
+ ../lib/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar
+ ../lib/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1.jar
+ ../lib/org/rzo/yajsw-core/0.0.1/yajsw-core-0.0.1-distribution.jar
+ ../lib/org/apache/maven/maven-model/2.2.1/maven-model-2.2.1.jar
+ ../lib/org/apache/maven/maven-artifact/2.2.1/maven-artifact-2.2.1.jar
+ ../lib/junit/junit/3.8.1/junit-3.8.1.jar
+       
+Class-Path-App: 
+ ../lib/org/apache/maven/maven-plugin-api/2.2.1/maven-plugin-api-2.2.1.jar
+ ../lib/org/apache/maven/maven-core/2.0.9/maven-core-2.0.9.jar
+ ../lib/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1.jar
+ ../lib/org/rzo/yajsw-core/0.0.1/yajsw-core-0.0.1-distribution.jar
+ ../lib/org/apache/maven/maven-model/2.2.1/maven-model-2.2.1.jar
+ ../lib/org/apache/maven/maven-artifact/2.2.1/maven-artifact-2.2.1.jar
+ ../lib/junit/junit/3.8.1/junit-3.8.1.jar
+       
+Main-Class: org.rzo.yajsw.boot.WrapperExeBooter
