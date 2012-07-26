@@ -29,16 +29,26 @@ import org.codehaus.plexus.configuration.PlexusConfiguration;
  *                   role-hint="include-project-dependencies"
  * @plexus.requirement role="org.codehaus.plexus.component.configurator.converters.lookup.ConverterLookup"
  *                   role-hint="default"
+ * @requiresDependencyResolution compile+runtime
  */
-public class IncludeProjectDependenciesComponentConfigurator extends AbstractComponentConfigurator { 
 
-    private static final Logger LOGGER = Logger.getLogger(IncludeProjectDependenciesComponentConfigurator.class);
+public class IncludeProjectDependenciesComponentConfigurator extends AbstractComponentConfigurator { 
+	private static List<URL> dependencies=new ArrayList<URL>();
+	private static List<String> dependencyStrings=new ArrayList<String>();
+    /**
+	 * @return the dependencies
+	 */
+	public static List<URL> getDependencies() {
+		return dependencies;
+	}
+
+	private static final Logger LOGGER = Logger.getRootLogger();
 
     public void configureComponent( Object component, PlexusConfiguration configuration,
                                     ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm,
                                     ConfigurationListener listener )
         throws ComponentConfigurationException {
-
+    	System.out.println("configurecomp");
         addProjectDependenciesToClassRealm(expressionEvaluator, containerRealm);
 
         converterLookup.registerConverter( new ClassRealmConverter( containerRealm ) );
@@ -51,9 +61,10 @@ public class IncludeProjectDependenciesComponentConfigurator extends AbstractCom
     @SuppressWarnings("unchecked")
 	private void addProjectDependenciesToClassRealm(ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm) throws ComponentConfigurationException {
         List<String> runtimeClasspathElements;
-        try {
+    	System.out.println("addProjectDependenciesToClassRealm");
+      try {
             //noinspection unchecked
-        	Object rce=expressionEvaluator.evaluate("${project.runtimeClasspathElements}");
+        	Object rce=expressionEvaluator.evaluate("${project.compileClasspathElements}");
        		runtimeClasspathElements = (List<String>) rce;
 
         } catch (ExpressionEvaluationException e) {
@@ -64,16 +75,19 @@ public class IncludeProjectDependenciesComponentConfigurator extends AbstractCom
         final URL[] urls = buildURLs(runtimeClasspathElements);
         for (URL url : urls) {
             containerRealm.addConstituent(url);
+            dependencies.add(url);
         }
     }
 
     private URL[] buildURLs(List<String> runtimeClasspathElements) throws ComponentConfigurationException {
         // Add the projects classes and dependencies
-        List<URL> urls = new ArrayList<URL>(runtimeClasspathElements.size());
+    	System.out.println("buildURLs");
+    	List<URL> urls = new ArrayList<URL>(runtimeClasspathElements.size());
         for (String element : runtimeClasspathElements) {
             try {
                 final URL url = new File(element).toURI().toURL();
                 urls.add(url);
+                getDependencyStrings().add(element);
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Added to project class loader: " + url);
                 }
@@ -85,5 +99,12 @@ public class IncludeProjectDependenciesComponentConfigurator extends AbstractCom
         // Add the plugin's dependencies (so Trove stuff works if Trove isn't on
         return urls.toArray(new URL[urls.size()]);
     }
+	/**
+	 * @return the dependencyStrings
+	 */
+	public static List<String> getDependencyStrings() {
+		return dependencyStrings;
+	}
+
 
 }

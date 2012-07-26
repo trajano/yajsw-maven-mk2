@@ -16,19 +16,23 @@ package org.yajsw.maven.plugin;
  * limitations under the License.
  */
 
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 
 /**
  * @goal generate
- * @phase process-classes
+ * @phase package
  * @configurator include-project-dependencies
  * @requiresDependencyResolution compile+runtime
  */
+
 public class YAJSWMojo
     extends AbstractMojo
 {
@@ -38,17 +42,32 @@ public class YAJSWMojo
      * @required
      */
     private File outputDirectory;
+	Logger logger=Logger.getLogger(YAJSWMojo.class);
 
+	/** @parameter default-value="${project}" */
+	private org.apache.maven.project.MavenProject mavenProject;
     public void execute()
         throws MojoExecutionException
     {
         File f = outputDirectory;
-
+       Set artifacts= mavenProject.getArtifacts();
+       System.out.println("listing dep artifacts");
+       for (Object artifact: artifacts)
+       {
+           System.out.println("dep artifact:" +artifact.toString());
+    	   
+       }
+//getProjectReferenceId(, artifactId, version)
+        
         if ( !f.exists() )
         {
             f.mkdirs();
         }
-
+        System.out.println("getting dependencies");
+        for (String dependency: IncludeProjectDependenciesComponentConfigurator.getDependencyStrings())
+        {
+        	System.out.println("dependency: "+dependency.toString());
+        }
         File touch = new File( f, "touch.txt" );
         this.getPluginContext();
         FileWriter w = null;
